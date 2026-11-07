@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nisar Sorry for Suhana</title>
+
+    <!-- Updated fonts: elegant headings + clean readable body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0a12;
+            --card-bg: rgba(20, 20, 35, 0.75);
+            --border-glow: rgba(255, 117, 140, 0.3);
+            --gradient-heading-1: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            --accent-pink: #ff4d6d;
+            --accent-gold: #ffb703;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Nunito', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #rainCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        .emoji-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; overflow: hidden;
+        }
+
+        .floating-emoji {
+            position: absolute; font-size: 1.8rem; opacity: 0.35;
+            animation: floatEmoji 12s linear infinite;
+        }
+
+        .container {
+            position: relative; z-index: 2; max-width: 900px;
+            margin: 0 auto; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; gap: 32px;
+        }
+
+        .header-card {
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow); border-radius: 24px;
+            padding: 35px 25px; text-align: center; width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .site-title {
+            font-family: 'DM Serif Display', serif; font-weight: 400;
+            font-size: 3rem; letter-spacing: 0.5px;
+            background: var(--gradient-heading-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .header-notice { font-size: 1.15rem; color: var(--accent-gold); font-weight: 700; }
+
+        .image-card {
+            width: 100%; max-width: 480px; background: var(--card-bg);
+            backdrop-filter: blur(16px); border: 2px solid rgba(255, 77, 109, 0.4);
+            border-radius: 28px; padding: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        .apology-image {
+            width: 100%; height: auto; display: block;
+            border-radius: 20px; object-fit: cover;
+        }
+
+        .image-label {
+            text-align: center; margin-top: 14px;
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400; font-size: 1.6rem; color: #ff758c;
+        }
+
+        .plea-card {
+            background: linear-gradient(135deg, rgba(255, 77, 109, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border: 2px solid var(--accent-pink); border-radius: 24px;
+            padding: 30px 20px; text-align: center; width: 100%;
+            box-shadow: 0 0 35px rgba(255, 77, 109, 0.3);
+        }
+
+        .plea-text {
+            font-family: 'DM Serif Display', serif; font-weight: 400;
+            font-size: 2rem; color: #ffffff; line-height: 1.5;
+        }
+
+        .narrative-card {
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow); border-radius: 24px;
+            padding: 40px 30px; width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-heading {
+            font-family: 'DM Serif Display', serif; font-weight: 400;
+            font-size: 2.35rem; margin-bottom: 22px;
+            text-align: center; color: #ff758c;
+        }
+
+        .narrative-p {
+            font-size: 1.12rem; line-height: 1.9; color: #e2e8f0;
+            margin-bottom: 20px; text-align: left; font-weight: 500;
+        }
+
+        .narrative-p strong { color: #ff758c; font-weight: 800; }
+
+        .interstitial-line {
+            text-align: center; font-family: 'DM Serif Display', serif;
+            font-weight: 400; font-size: 1.55rem; color: var(--accent-pink);
+            background: rgba(255, 77, 109, 0.1); padding: 14px 20px;
+            border-radius: 50px; border: 1px dashed rgba(255, 77, 109, 0.4);
+            margin: 25px 0;
+        }
+
+        .promise-banner {
+            text-align: center; font-size: 1.15rem; font-weight: 700;
+            color: var(--accent-gold); background: rgba(255, 183, 3, 0.1);
+            padding: 16px 22px; border-radius: 18px;
+            border: 1px solid rgba(255, 183, 3, 0.3); margin-top: 15px;
+        }
+
+        .counter-section {
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow); border-radius: 24px;
+            padding: 35px 25px; width: 100%;
+        }
+
+        .counter-title {
+            text-align: center; font-family: 'DM Serif Display', serif;
+            font-weight: 400; font-size: 2.4rem; color: var(--accent-gold);
+            margin-bottom: 25px;
+        }
+
+        .sorry-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px; max-height: 520px; overflow-y: auto; padding-right: 8px;
+        }
+
+        .sorry-grid::-webkit-scrollbar { width: 6px; }
+        .sorry-grid::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+        .sorry-grid::-webkit-scrollbar-thumb { background: var(--accent-pink); border-radius: 10px; }
+
+        .sorry-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; padding: 10px 6px; text-align: center;
+            font-size: 1rem; font-weight: 700; color: #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .sorry-box:hover {
+            background: rgba(255, 77, 109, 0.25);
+            border-color: var(--accent-pink); transform: scale(1.05);
+        }
+
+        @keyframes floatEmoji {
+            0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .site-title { font-size: 2.35rem; }
+            .plea-text { font-size: 1.65rem; }
+            .section-heading { font-size: 2rem; }
+            .interstitial-line { font-size: 1.3rem; }
+            .sorry-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+            .narrative-card { padding: 30px 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="rainCanvas"></canvas>
+    <div class="emoji-layer" id="emojiLayer"></div>
+
+    <main class="container">
+        <header class="header-card">
+            <h1 class="site-title">nisar sorry for Suhana</h1>
+            <p class="header-notice">please mere saare baton ko dhyan se padhna 🙏</p>
+        </header>
+
+        <section class="image-card">
+            <!-- Keep input_file_0.png in the same folder as this index.html file -->
+            <img src="input_file_0.png" alt="Nisar begging forgiveness from Suhana" class="apology-image">
+            <div class="image-label">Suhana &amp; Nisar ❤️</div>
+        </section>
+
+        <section class="plea-card">
+            <div class="plea-text">Suhana me aapke pair padhta hun please mujhe maaf kar do please 🙏😭</div>
+        </section>
+
+        <article class="narrative-card">
+            <h2 class="section-heading">Meri Suhana Ke Liye Dil Ki Baat</h2>
+            <p class="narrative-p"><strong>Suhana</strong>, mujhe nahi pata ki main apni galtiyon ki maafi kis tarah maangu. 😔❤️</p>
+            <p class="narrative-p">Bas itna kehna chahta hoon ki mujhe apni wajah se tumhe hui har takleef ka bahut afsos hai. <strong>Mujhe pata hai ki meri wajah se tumhari mummy ne tumhe bahut kuch kaha hoga.</strong> Tumhe kitni pareshani aur dard se guzarna pada hoga, iska mujhe sach mein bahut pachtawa hai. 😭🙏</p>
+            <div class="interstitial-line">Suhana me aapke pair padhta hun please mujhe maaf kar do please 🙏😭</div>
+            <p class="narrative-p">Mera kabhi bhi irada tumhe takleef pahunchane ka nahi tha. Lekin meri wajah se tumhe itna kuch sehna pada, is baat ka mujhe dil se dukh hai.</p>
+        </article>
+
+        <article class="narrative-card">
+            <h2 class="section-heading">Nisar Ki Sacchi Maafi</h2>
+            <p class="narrative-p">Main tumse koi safai nahi dena chahta. Bas apni galti maan kar tumse dil se maafi maangna chahta hoon. Please ho sake toh mujhe maaf kar dena. ❤️</p>
+            <p class="narrative-p">Main tum par maaf karne ka koi pressure nahi daalunga. Bas chahta hoon ki tum khush raho aur tumhari aankhon mein kabhi meri wajah se aansu na aayein. 😭❤️</p>
+            <div class="interstitial-line">I AM REALLY SORRY SUHANA. 🙏🥺❤️</div>
+            <div class="promise-banner">❤️ Suhana, meri maafi sirf shabdon mein nahi, mere badle hue bartav mein bhi nazar aayegi. 🙏</div>
+        </article>
+
+        <section class="counter-section">
+            <h2 class="counter-title">100 Times Dil Se Sorry</h2>
+            <div class="sorry-grid" id="sorryGrid"></div>
+        </section>
+    </main>
+
+    <script>
+        // Rain animation
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class RainParticle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.length = Math.random() * 22 + 12;
+                this.speedY = Math.random() * 11 + 7;
+                this.speedX = Math.random() * 1.6 - 0.8;
+                this.opacity = Math.random() * 0.45 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                if (this.y > height) { this.reset(); this.y = 0; }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x + this.speedX, this.y + this.length);
+                ctx.strokeStyle = `rgba(174, 194, 224, ${this.opacity})`;
+                ctx.lineWidth = 1.3;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        const rainDrops = [];
+        for (let i = 0; i < 260; i++) rainDrops.push(new RainParticle());
+
+        function renderRain() {
+            ctx.clearRect(0, 0, width, height);
+            for (const drop of rainDrops) { drop.update(); drop.draw(); }
+            requestAnimationFrame(renderRain);
+        }
+        renderRain();
+
+        // Floating emojis
+        const emojiLayer = document.getElementById('emojiLayer');
+        const sadEmojis = ['😭', '🥺', '💔', '😿', '💧', '🙏'];
+        for (let i = 0; i < 24; i++) {
+            const emojiDiv = document.createElement('div');
+            emojiDiv.className = 'floating-emoji';
+            emojiDiv.innerText = sadEmojis[Math.floor(Math.random() * sadEmojis.length)];
+            emojiDiv.style.left = `${Math.random() * 100}%`;
+            emojiDiv.style.animationDelay = `${Math.random() * 10}s`;
+            emojiDiv.style.animationDuration = `${Math.random() * 8 + 8}s`;
+            emojiLayer.appendChild(emojiDiv);
+        }
+
+        // 100 sorry messages
+        const sorryGrid = document.getElementById('sorryGrid');
+        for (let i = 1; i <= 100; i++) {
+            const item = document.createElement('div');
+            item.className = 'sorry-box';
+            item.innerText = `${i}. Sorry 🙏😭`;
+            sorryGrid.appendChild(item);
+        }
+    </script>
+</body>
+</html>
